@@ -1,19 +1,23 @@
 package com.example.composepermissionhandling
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
 
-    val visiblePermissionDialogQueue = mutableListOf<String>()
+    val visiblePermissionDialogQueue = mutableStateListOf<String>()
 
     fun dismissDialog() {
-        visiblePermissionDialogQueue.removeLast()
+        visiblePermissionDialogQueue.removeFirst()
     }
 
     fun onPermissionResult(
         permission: String,
         isGranted: Boolean
     ) {
-        visiblePermissionDialogQueue.add(0,permission)
+        if (!isGranted && !visiblePermissionDialogQueue.contains(permission)) {
+            visiblePermissionDialogQueue.add(permission)
+        }
     }
 }
